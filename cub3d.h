@@ -124,3 +124,129 @@ typedef struct s_ray
 	double				wall_x;
 }						t_ray;
 
+typedef struct t_playerinfo
+{
+	int					x;
+	int					y;
+	char				f;
+}						t_playerinfo;
+
+typedef struct t_cub_info
+{
+	char				**map;
+	char				*north;
+	char				*south;
+	char				*east;
+	char				*west;
+	char				*floor_color;
+	char				*ceiling_color;
+	t_playerinfo		*player;
+}						t_cub_info;
+
+typedef struct s_parse_color
+{
+	char				**color;
+	int					i;
+	int					j;
+	int					comp;
+	int					x;
+}						t_parse_color;
+
+typedef struct s_texture_count
+{
+	struct t_cub_info	*info;
+	int					no;
+	int					so;
+	int					ea;
+	int					we;
+	int					f;
+	int					c;
+}						t_texture_count;
+
+typedef struct s_draw_params
+{
+	int					line_height;
+	int					draw_start;
+	int					draw_end;
+	int					tex_x;
+	double				step;
+	double				tex_pos;
+}						t_draw_params;
+
+int						key_handler(int keysym, t_game *game);
+int						key_release_handler(int keysym, t_game *game);
+int						game_loop(t_game *game);
+int						close_handler(t_game *game);
+void					draw_map(char **mape, int map_size, t_game *game);
+int						get_totals_rows(char **arena);
+int						get_totals_colums(char **arena, int rows);
+int						is_valid_map_line(char *line);
+void					player(t_game *game, char **arena);
+void					player_movements(t_game *game, int keysym);
+void					calculate_next_position(t_game *game, t_player *player,
+							int keysym);
+int						can_move_to(t_game *game, float px, float py);
+void					ray_direction(t_game *game);
+void					draw_ray(t_game *game);
+void					clear_window(t_game *game);
+void					rotate_camera(t_game *game, double angle);
+void					init_rays(t_game *game, t_ray *ray, int x);
+void					check_hit_wall(t_game *game, t_ray *ray);
+void					calculate_wall_distance(t_game *game, t_ray *ray);
+void					draw_wall(t_game *game, int x, t_ray *ray);
+void					raycast_3d(t_game *game);
+int						load_textures(t_game *game, t_cub_info *info);
+void					set_player_direction(t_game *game, char direction);
+void					get_direction(t_game *game, int keysym, double *dx,
+							double *dy);
+void					normalize_vector(double *dx, double *dy);
+void					try_move(t_game *game, t_player *player, double dx,
+							double dy);
+void					init_ray_dir_and_map(t_game *game, t_ray *ray, int x);
+void					init_delta_dist(t_ray *ray);
+void					init_step_x(t_game *game, t_ray *ray);
+void					transfer_parsed_data_to_game(t_game *game,
+							t_cub_info *info);
+void					set_dir_plane_n(t_game *game, double plane_len);
+void					set_dir_plane_s(t_game *game, double plane_len);
+void					set_dir_plane_e(t_game *game, double plane_len);
+void					set_dir_plane_w(t_game *game, double plane_len);
+
+int						is_empty_line(char *line);
+int						is_identifier_line(char *line);
+int						validate_all_spaces_closed(char **map, int height);
+char					**duplicate_map(char **map, int height, int width);
+void					free_map_copy(char **map);
+void					parse_info(t_cub_info *info);
+int						get_line_length(char *line);
+char					**extract_map(char **lines, int *map_start_idx);
+void					check_player(char **map, t_cub_info *info);
+void					put_pixel_to_frame(t_game *game, int x, int y,
+							int color);
+int						choose_texture_index(t_ray *ray);
+
+int						validate_map_closing(t_cub_info *info);
+int						parse_textures(t_cub_info *info);
+int						count_lines(int fd);
+int						ft_atoi(char *str);
+int						map_info(t_cub_info *info);
+int						map_parsing(t_cub_info *info);
+int						ft_strcmp(char *s1, char *s2);
+char					*ft_itoa(int n);
+int						format_check(char *str, char *format);
+char					*ft_strcpy(char *dest, char *src);
+int						ft_strncmp(char *s1, char *s2, unsigned int n);
+char					*ft_strtrim(char *s1, char *set);
+void					process_inside_spaces(char **map, int h, int w);
+int						is_inside_space(char **map, int y, int x);
+int						get_map_height(char **map);
+int						get_map_width(char **map);
+int						hex_to_int(char *hex);
+void					free_color(t_parse_color p);
+void					free_texture_images(t_game *game);
+void					free_map_array(char **map);
+int						free_info(struct t_cub_info *info);
+int						cleanup_game(t_game *game);
+int						free_initial_info(struct t_cub_info *info);
+
+#endif
