@@ -41,3 +41,47 @@ void	draw_ceiling(t_game *game, int x, int draw_start)
 		++y;
 	}
 }
+
+void	draw_floor(t_game *game, int x, int start_y)
+{
+	int	y;
+
+	y = start_y;
+	while (y < HEIGHT)
+	{
+		put_pixel_to_frame(game, x, y, hex_to_int(game->info->floor_color));
+		++y;
+	}
+}
+
+void	draw_wall_pixels(t_game *game, t_img *texture, int x, t_draw_params *p)
+{
+	int	y;
+	int	tex_y;
+	int	color;
+
+	y = p->draw_start;
+	while (y <= p->draw_end)
+	{
+		tex_y = (int)p->tex_pos;
+		p->tex_pos += p->step;
+		color = *(int *)(texture->addr + (tex_y * texture->line_len + p->tex_x
+					* (texture->bpp / 8)));
+		put_pixel_to_frame(game, x, y, color);
+		++y;
+	}
+}
+
+void	draw_wall(t_game *game, int x, t_ray *ray)
+{
+	t_img			*texture;
+	t_draw_params	p;
+	int				tex_index;
+
+	tex_index = choose_texture_index(ray);
+	texture = &game->textures[tex_index];
+	draw_floor_ceiling_wall(&p, texture, ray);
+	draw_ceiling(game, x, p.draw_start);
+	draw_wall_pixels(game, texture, x, &p);
+	draw_floor(game, x, p.draw_end + 1);
+}
