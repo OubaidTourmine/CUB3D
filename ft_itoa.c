@@ -27,3 +27,32 @@ int	ft_intlen(int n)
 		i++;
 	}
 	return (i);
+}
+
+char	*ft_itoa(int n)
+{
+	unsigned long		len;
+	char				*r;
+	long				z;
+
+	z = n;
+	len = ft_intlen(n);
+	r = malloc(len + 1);
+	if (r == NULL)
+		return (NULL);
+	r[len--] = '\0';
+	if (z == 0)
+		r[0] = '0';
+	if (z < 0)
+	{
+		r[0] = '-';
+		z = -z;
+	}
+	while (z != 0)
+	{
+		r[len] = ((z % 10) + 48);
+		z = z / 10;
+		len--;
+	}
+	return (r);
+}
