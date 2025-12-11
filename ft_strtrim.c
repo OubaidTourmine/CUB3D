@@ -26,3 +26,32 @@ int	ft_start(char *s, char *set)
 			if (s[strt] == set[y])
 				break ;
 			y++;
+		}
+		if (set[y] == '\0')
+			break ;
+		strt++;
+	}
+	return (strt);
+}
+
+int	ft_end(char *s, char *set)
+{
+	int	end;
+	int	y;
+
+	end = ft_strlen(s) - 1;
+	while (end >= 0)
+	{
+		y = 0;
+		while (set[y])
+		{
+			if (s[end] == set[y])
+				break ;
+			y++;
+		}
+		if (set[y] == '\0')
+			break ;
+		end--;
+	}
+	return (end);
+}
