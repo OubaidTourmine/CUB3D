@@ -19,3 +19,25 @@ void	init_step_y(t_game *game, t_ray *ray)
 		ray->step_y = -1;
 		ray->side_dist_y = (game->player.py / TILE_SIZE - ray->map_y)
 			* ray->delta_dist_y;
+	}
+	else
+	{
+		ray->step_y = 1;
+		ray->side_dist_y = (ray->map_y + 1.0 - game->player.py / TILE_SIZE)
+			* ray->delta_dist_y;
+	}
+}
+
+void	init_rays(t_game *game, t_ray *ray, int x)
+{
+	init_ray_dir_and_map(game, ray, x);
+	init_delta_dist(ray);
+	init_step_x(game, ray);
+	init_step_y(game, ray);
+}
+
+void	check_hit_wall(t_game *game, t_ray *ray)
+{
+	int	hit;
+
+	hit = 0;
