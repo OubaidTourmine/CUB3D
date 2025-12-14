@@ -47,3 +47,53 @@ int	key_release_handler(int keysym, t_game *game)
 		game->keys.right = 0;
 	return (0);
 }
+
+static void	handle_player_movement(t_game *game, int *moved)
+{
+	if (game->keys.w)
+	{
+		calculate_next_position(game, &game->player, XK_W_LOW);
+		*moved = 1;
+	}
+	if (game->keys.s)
+	{
+		calculate_next_position(game, &game->player, XK_S_LOW);
+		*moved = 1;
+	}
+	if (game->keys.a)
+	{
+		calculate_next_position(game, &game->player, XK_A_LOW);
+		*moved = 1;
+	}
+	if (game->keys.d)
+	{
+		calculate_next_position(game, &game->player, XK_D_LOW);
+		*moved = 1;
+	}
+}
+
+static void	handle_camera_rotation(t_game *game, int *moved)
+{
+	if (game->keys.left)
+	{
+		rotate_camera(game, -0.01);
+		*moved = 1;
+	}
+	if (game->keys.right)
+	{
+		rotate_camera(game, 0.01);
+		*moved = 1;
+	}
+}
+
+int	game_loop(t_game *game)
+{
+	int	moved;
+
+	moved = 0;
+	handle_player_movement(game, &moved);
+	handle_camera_rotation(game, &moved);
+	if (moved)
+		draw_map(game->arena, game->arena_size, game);
+	return (0);
+}
