@@ -47,3 +47,53 @@ int	is_empty_line(char *line)
 }
 
 void	check_map(char **map)
+{
+	int	i;
+	int	count;
+	int	j;
+
+	i = 0;
+	count = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j] && map[i][j] != '\n')
+		{
+			if (map[i][j] != 'N' && map[i][j] != 'S' && map[i][j] != 'E'
+				&& map[i][j] != 'W' && map[i][j] != '1' && map[i][j] != '0'
+				&& map[i][j] != ' ' && map[i][j] != '\t')
+				count++;
+			j++;
+		}
+		i++;
+	}
+	if (count != 0)
+		exit(printf("invalid map\n"));
+}
+
+int	map_parsing(t_cub_info *info)
+{
+	int		map_start;
+	char	**map_only;
+	char	**all_lines;
+	int		i;
+
+	map_start = 0;
+	all_lines = info->map;
+	map_only = extract_map(all_lines, &map_start);
+	if (!map_only)
+		return (1);
+	process_inside_spaces(map_only, 0, 0);
+	check_map(map_only);
+	check_player(map_only, info);
+	i = 0;
+	while (all_lines[i])
+	{
+		if (is_identifier_line(all_lines[i]) || is_empty_line(all_lines[i]))
+			free(all_lines[i]);
+		i++;
+	}
+	free(all_lines);
+	info->map = map_only;
+	return (0);
+}
