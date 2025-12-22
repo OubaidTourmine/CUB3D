@@ -51,3 +51,56 @@ char	**extract_map(char **lines, int *map_start_idx)
 	j = i;
 	while (lines[j])
 	{
+		if (!is_empty_line(lines[j]))
+			count++;
+		j++;
+	}
+	return (extract_map2(lines, i, count));
+}
+
+int	scan_for_player(char **map, t_cub_info *info)
+{
+	int		i;
+	int		count;
+	char	c;
+	int		j;
+
+	i = 0;
+	count = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j] && map[i][j] != '\n')
+		{
+			c = map[i][j];
+			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+			{
+				count++;
+				info->player->f = c;
+				info->player->y = i;
+				info->player->x = j;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (count);
+}
+
+void	check_player(char **map, t_cub_info *info)
+{
+	int	count;
+
+	if (!info->player)
+	{
+		info->player = malloc(sizeof(*info->player));
+		if (!info->player)
+			exit(printf("malloc failed\n"));
+	}
+	info->player->x = -1;
+	info->player->y = -1;
+	info->player->f = 0;
+	count = scan_for_player(map, info);
+	if (count != 1)
+		exit(printf("invalid map\n"));
+}
