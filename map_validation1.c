@@ -62,3 +62,68 @@ int	validate_map_closing(t_cub_info *info)
 void	replace_closed_spaces(char **map, char **copy, int h)
 {
 	int	i;
+	int	j;
+
+	i = 0;
+	while (i < h)
+	{
+		j = 0;
+		while (copy[i][j] && copy[i][j] != '\n')
+		{
+			if (copy[i][j] == 'V')
+				map[i][j] = '1';
+			j++;
+		}
+		i++;
+	}
+}
+
+int	is_inside_space(char **map, int y, int x)
+{
+	int	line_len;
+	int	has_wall_left;
+	int	has_wall_right;
+	int	j;
+
+	line_len = get_line_length(map[y]);
+	has_wall_left = 0;
+	has_wall_right = 0;
+	j = 0;
+	while (j < x)
+	{
+		if (map[y][j] == '1' || map[y][j] == '0' || map[y][j] == 'N'
+			|| map[y][j] == 'S' || map[y][j] == 'E' || map[y][j] == 'W')
+			has_wall_left = 1;
+		j++;
+	}
+	j = x + 1;
+	while (j < line_len && map[y][j] != '\n')
+	{
+		if (map[y][j] == '1' || map[y][j] == '0' || map[y][j] == 'N'
+			|| map[y][j] == 'S' || map[y][j] == 'E' || map[y][j] == 'W')
+			has_wall_right = 1;
+		j++;
+	}
+	return (has_wall_left && has_wall_right);
+}
+
+void	process_inside_spaces(char **map, int h, int w)
+{
+	int		i;
+	int		j;
+
+	h = get_map_height(map);
+	w = get_map_width(map);
+	i = 0;
+	while (i < h)
+	{
+		j = 0;
+		while (map[i][j] && map[i][j] != '\n')
+		{
+			if (map[i][j] == ' ' && is_inside_space(map, i, j))
+				map[i][j] = '1';
+			j++;
+		}
+		i++;
+	}
+}
