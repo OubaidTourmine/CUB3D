@@ -11,3 +11,7 @@ From the repository root, run `./cub3d test.cub` in a graphical Linux session. P
 ## Controls
 
 Use W, A, S, and D to move, the left and right arrow keys to turn, and Escape to exit.
+
+## Cleanup
+
+Run `make clean` to remove object files, `make fclean` to also remove `cub3d`, or `make re` for a complete rebuild.
