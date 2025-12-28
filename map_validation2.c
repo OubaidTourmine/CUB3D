@@ -55,3 +55,60 @@ int	validate_all_spaces_closed(char **map, int height)
 			if (map[i][j] == '0' || map[i][j] == 'N' || map[i][j] == 'S'
 				|| map[i][j] == 'E' || map[i][j] == 'W')
 			{
+				if (!check_cell_closed(map, i, j, height))
+				{
+					printf("Error: Walkable at [%d][%d] not closed\n", i, j);
+					return (0);
+				}
+			}
+			j++;
+		}
+		i++;
+	}
+	return (1);
+}
+
+char	*duplicate_map_row(char *src, int width)
+{
+	char	*row;
+	int		j;
+
+	row = malloc(sizeof(char) * (width + 1));
+	if (!row)
+		return (NULL);
+	j = 0;
+	while (src[j] && src[j] != '\n' && j < width)
+	{
+		row[j] = src[j];
+		j++;
+	}
+	while (j < width)
+		row[j++] = ' ';
+	row[j] = '\0';
+	return (row);
+}
+
+char	**duplicate_map(char **map, int height, int width)
+{
+	char	**copy;
+	int		i;
+
+	copy = malloc(sizeof(char *) * (height + 1));
+	if (!copy)
+		return (NULL);
+	i = 0;
+	while (i < height)
+	{
+		copy[i] = duplicate_map_row(map[i], width);
+		if (!copy[i])
+		{
+			while (--i >= 0)
+				free(copy[i]);
+			free(copy);
+			return (NULL);
+		}
+		i++;
+	}
+	copy[i] = NULL;
+	return (copy);
+}
