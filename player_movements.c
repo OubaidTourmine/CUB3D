@@ -39,3 +39,24 @@ void	get_direction(t_game *game, int keysym, double *dx, double *dy)
 void	normalize_vector(double *dx, double *dy)
 {
 	double	mag;
+
+	mag = sqrt((*dx) * (*dx) + (*dy) * (*dy));
+	if (mag > 0.000001)
+	{
+		*dx /= mag;
+		*dy /= mag;
+	}
+}
+
+void	try_move(t_game *game, t_player *player, double dx, double dy)
+{
+	double	try_px;
+	double	try_py;
+
+	try_px = player->px + dx * player->speed;
+	try_py = player->py + dy * player->speed;
+	if (can_move_to(game, try_px, player->py))
+		player->px = try_px;
+	if (can_move_to(game, player->px, try_py))
+		player->py = try_py;
+}
