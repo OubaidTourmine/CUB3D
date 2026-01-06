@@ -24,3 +24,29 @@ void	init_ray_dir_and_map(t_game *game, t_ray *ray, int x)
 }
 
 void	init_delta_dist(t_ray *ray)
+{
+	if (ray->raydir_x == 0)
+		ray->delta_dist_x = 1e30;
+	else
+		ray->delta_dist_x = fabs(1 / ray->raydir_x);
+	if (ray->raydir_y == 0)
+		ray->delta_dist_y = 1e30;
+	else
+		ray->delta_dist_y = fabs(1 / ray->raydir_y);
+}
+
+void	init_step_x(t_game *game, t_ray *ray)
+{
+	if (ray->raydir_x < 0)
+	{
+		ray->step_x = -1;
+		ray->side_dist_x = (game->player.px / TILE_SIZE - ray->map_x)
+			* ray->delta_dist_x;
+	}
+	else
+	{
+		ray->step_x = 1;
+		ray->side_dist_x = (ray->map_x + 1.0 - game->player.px / TILE_SIZE)
+			* ray->delta_dist_x;
+	}
+}
