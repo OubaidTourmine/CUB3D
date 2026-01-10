@@ -33,3 +33,39 @@ int	ft_atoi(char *str)
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
+		result = result * 10 + str[i] - 48;
+		i++;
+	}
+	return (result * signe);
+}
+
+char	*ft_strcpy(char *dest, char *src)
+{
+	int	i;
+
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+int	format_check(char *str, char *format)
+{
+	int	i;
+	int	x;
+
+	i = 0;
+	x = 0;
+	while (str[i])
+		i++;
+	i -= 4;
+	while (str[i])
+	{
+		if (str[i] == format[x])
+		{
+			i++;
+			x++;
