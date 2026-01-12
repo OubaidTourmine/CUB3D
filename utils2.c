@@ -41,3 +41,47 @@ int	count_lines(int fd)
 	line = get_next_line(fd);
 	while (line)
 	{
+		count++;
+		free(line);
+		line = get_next_line(fd);
+	}
+	return (count);
+}
+
+int	load_texture_index(t_game *game, const char *path, int idx,
+		const char *name)
+{
+	game->textures[idx].img = mlx_xpm_file_to_image(game->mlx, (char *)path,
+			&game->textures[idx].width, &game->textures[idx].height);
+	if (!game->textures[idx].img)
+		return (printf("Error: Failed to load %s texture: %s\n", name, path),
+			1);
+	game->textures[idx].addr = mlx_get_data_addr(game->textures[idx].img,
+			&game->textures[idx].bpp, &game->textures[idx].line_len,
+			&game->textures[idx].endian);
+	return (0);
+}
+
+int	load_textures(t_game *game, t_cub_info *info)
+{
+	const char	*paths[4];
+	const char	*names[4];
+	int			i;
+
+	paths[0] = info->north;
+	paths[1] = info->south;
+	paths[2] = info->west;
+	paths[3] = info->east;
+	names[0] = "North";
+	names[1] = "South";
+	names[2] = "West";
+	names[3] = "East";
+	i = 0;
+	while (i < 4)
+	{
+		if (load_texture_index(game, paths[i], i, names[i]) != 0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
