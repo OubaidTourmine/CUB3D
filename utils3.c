@@ -32,3 +32,37 @@ void	rotate_camera(t_game *game, double angle)
 int	get_line_length(char *line)
 {
 	int	len;
+
+	len = 0;
+	while (line[len] && line[len] != '\n')
+		len++;
+	return (len);
+}
+
+int	close_handler(t_game *game)
+{
+	printf("Closing game...\n");
+	cleanup_game(game);
+	exit(0);
+}
+
+void	free_texture_images(t_game *game)
+{
+	int	i;
+
+	i = 0;
+	while (i < 4)
+	{
+		if (game->textures[i].img)
+			mlx_destroy_image(game->mlx, game->textures[i].img);
+		i++;
+	}
+}
+
+void	free_color(t_parse_color p)
+{
+	free(p.color[0]);
+	free(p.color[1]);
+	free(p.color[2]);
+	free(p.color);
+}
