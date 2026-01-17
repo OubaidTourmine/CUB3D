@@ -33,3 +33,38 @@ int	hex_to_int(char *hex)
 		if (c >= 'A' && c <= 'F')
 			result = result + (c - 'A' + 10);
 		i++;
+	}
+	return (result);
+}
+
+void	free_map_array(char **map)
+{
+	int	i;
+
+	if (!map)
+		return ;
+	i = 0;
+	while (map[i])
+	{
+		free(map[i]);
+		i++;
+	}
+	free(map);
+}
+
+int	free_info(t_cub_info *info)
+{
+	if (!info)
+		return (2);
+	if (info->map)
+		free_map_array(info->map);
+	if (info->north)
+		free(info->north);
+	if (info->south)
+		free(info->south);
+	if (info->east)
+		free(info->east);
+	if (info->west)
+		free(info->west);
+	if (info->floor_color)
+		free(info->floor_color);
