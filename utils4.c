@@ -68,3 +68,38 @@ int	free_info(t_cub_info *info)
 		free(info->west);
 	if (info->floor_color)
 		free(info->floor_color);
+	if (info->ceiling_color)
+		free(info->ceiling_color);
+	if (info->player)
+		free(info->player);
+	free(info);
+	return (1);
+}
+
+int	cleanup_game(t_game *game)
+{
+	if (!game)
+		return (2);
+	free_texture_images(game);
+	if (game->frame.img)
+		mlx_destroy_image(game->mlx, game->frame.img);
+	if (game->win)
+		mlx_destroy_window(game->mlx, game->win);
+	if (game->info)
+		free_info(game->info);
+	if (game->mlx)
+		free(game->mlx);
+	return (1);
+}
+
+int	free_initial_info(t_cub_info *info)
+{
+	if (!info)
+		return (2);
+	if (info->map)
+		free_map_array(info->map);
+	if (info->player)
+		free(info->player);
+	free(info);
+	return (1);
+}
