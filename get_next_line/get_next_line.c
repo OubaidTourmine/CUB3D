@@ -33,3 +33,38 @@ static char	*fill_line_buffer(int fd, char *left_c, char *buffer)
 			temp = left_c;
 			left_c = ft_strjoin(temp, buffer);
 			free(temp);
+		}
+		if (ft_strchr(left_c, '\n') || b_r == 0)
+			break ;
+	}
+	return (left_c);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*left_c[1024];
+	char		*buffer;
+	char		*line;
+	char		*temp;
+	int			i;
+
+	i = 0;
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+	{
+		return (NULL);
+	}
+	left_c[fd] = fill_line_buffer(fd, left_c[fd], buffer);
+	free(buffer);
+	if (left_c[fd] == NULL)
+	{
+		return (NULL);
+	}
+	while (left_c[fd][i] != '\n' && left_c[fd][i] != '\0')
+		i++;
+	line = ft_substr(left_c[fd], 0, i + 1);
+	temp = ft_substr(left_c[fd], i + 1, ft_strlen(left_c[fd]));
+	free(left_c[fd]);
+	left_c[fd] = temp;
+	return (line);
+}
